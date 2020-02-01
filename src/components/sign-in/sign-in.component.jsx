@@ -1,0 +1,77 @@
+import React, { useState } from "react";
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+
+import { auth } from "../../firebase/firebase.utils";
+
+const useStyles = makeStyles(theme => ({
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  },
+  error: {
+    color: "red"
+  }
+}));
+
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const classes = useStyles();
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setEmail("");
+      setPassword("");
+      setError("");
+    } catch (error) {
+      console.error("sign in error")
+      console.log(error);
+      setError(error);
+    }
+  };
+    return (
+      <>
+        <CssBaseline />
+        <form className={classes.form} onSubmit={handleSubmit}>
+          <TextField
+            name="email"
+            type="email"
+            onChange={e => setEmail(e.target.value)}
+            value={email}
+            label="email"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+          />
+          <TextField
+            name="password"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            label="password"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+          />
+          <FormHelperText className={classes.error}>{error ? error.message : null}</FormHelperText>
+          <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>
+            Sign In
+          </Button>
+        </form>
+      </>
+    );
+  }
+
+export default SignIn;
