@@ -11,7 +11,7 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     const { fetchCollectionsStartAsync } = this.props;
-    fetchCollectionsStartAsync();
+    fetchCollectionsStartAsync('supplies');
   }
 
   render() {
@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync())
+  fetchCollectionsStartAsync: (name) => dispatch(fetchCollectionsStartAsync(name))
 });
 
 export default connect(

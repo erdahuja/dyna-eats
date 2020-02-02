@@ -1,10 +1,13 @@
 import { createSelector } from 'reselect';
 
-export const selectData = state => state.dashboard;
-export const selectIsDataFetching = state => state.isFetching
+export const selectDashboard = state => state.dashboard;
 
-export const selectCollection = () =>
-  createSelector(
-    [selectData],
-    data => (data ? data : null)
+export const selectData = createSelector(
+    [selectDashboard],
+    dashboard => (dashboard.data ? dashboard.data : [])
+  );
+
+export const selectIsDataFetching = createSelector(
+    [selectDashboard],
+    data => (data.isFetching ? true : false)
   );
