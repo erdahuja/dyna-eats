@@ -82,7 +82,7 @@ const EnhancedTableToolbar = props => {
 };
 
 EnhancedTableToolbar.propTypes = {
-  Title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired
 };
 
 const useStyles = makeStyles(theme => ({

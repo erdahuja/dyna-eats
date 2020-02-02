@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -12,16 +12,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import { firestore } from "../../firebase/firebase.utils";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
-  },
+    minWidth: 120
+  }
 }));
 
 export default function FormDialog() {
@@ -61,18 +61,6 @@ export default function FormDialog() {
       >
         <DialogTitle id="form-dialog-title">Add Supply</DialogTitle>
         <DialogContent>
-        <FormControl className={classes.formControl}>
-        <InputLabel id="simple-select-label">Age</InputLabel>
-          <Select
-          labelId="simple-select-label"
-          id="simple-select"
-          required value={type} onChange={e => setType(e.target.value)}>
-            <MenuItem value="Vegetables">Vegetables</MenuItem>
-            <MenuItem value="Flour">Flour</MenuItem>
-            <MenuItem value="Fats">Fats</MenuItem>
-            <MenuItem value="Add-Ons">Add-Ons</MenuItem>
-          </Select>
-        </FormControl>
           <TextField
             autoFocus
             margin="dense"
@@ -83,6 +71,7 @@ export default function FormDialog() {
             type="string"
             fullWidth
           />
+
           <TextField
             margin="dense"
             onChange={e => setQtyRequired(e.target.value)}
@@ -110,6 +99,21 @@ export default function FormDialog() {
             type="number"
             fullWidth
           />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="simple-select-label">Type</InputLabel>
+            <Select
+              labelId="simple-select-label"
+              id="simple-select"
+              required
+              value={type}
+              onChange={e => setType(e.target.value)}
+            >
+              <MenuItem value="Vegetables">Vegetables</MenuItem>
+              <MenuItem value="Flour">Flour</MenuItem>
+              <MenuItem value="Fats">Fats</MenuItem>
+              <MenuItem value="Add-Ons">Add-Ons</MenuItem>
+            </Select>
+          </FormControl>
           <FormControlLabel
             control={
               <Checkbox

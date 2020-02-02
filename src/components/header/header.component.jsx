@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 import { auth } from "../../firebase/firebase.utils";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
-import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,11 +22,17 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  point: {
+    cursor: "pointer"
   }
 }));
 
 const Header = ({ currentUser }) => {
   const classes = useStyles();
+  console.log({
+    currentUser
+  });
   return (
     <AppBar position="static">
       <Toolbar>
@@ -35,19 +42,34 @@ const Header = ({ currentUser }) => {
           color="inherit"
           aria-label="menu"
         >
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
         </IconButton>
         <Typography variant="h6" className={classes.title}>
           Dyno Eats
         </Typography>
-        {currentUser ? <Button onClick={() => auth.signOut()} color="inherit">Logout</Button>: null}
+        {currentUser ? (
+          <>
+          <Typography variant="h6" className={classes.title}>
+            User: {currentUser.name}
+          </Typography>
+                      <Button
+                      className={classes.point}
+                      onClick={() => auth.signOut()}
+                      color="inherit"
+                    >
+                      Logout
+                    </Button>
+                    </>
+        ) : null}
       </Toolbar>
     </AppBar>
   );
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
+  currentUser: selectCurrentUser
 });
 
 export default connect(mapStateToProps)(Header);
