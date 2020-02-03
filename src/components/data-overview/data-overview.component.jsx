@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { selectData } from "../../redux/dashboard/dashboard.selectors";
-import EnhancedTable from "../table/table.component";
+import EnhancedTable from "../table-manager/table.component";
 import FormDialog from "../form/form.component";
 
 const headCells = [

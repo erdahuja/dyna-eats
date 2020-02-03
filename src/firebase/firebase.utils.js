@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBr7oQ3SYd1c5mcDPubBWcRNskLEk5Wq-c",
@@ -31,7 +31,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         ...additionalData
       });
     } catch (error) {
-      console.log('error creating user', error.message);
+      console.log("error creating user", error.message);
     }
   }
 
@@ -46,20 +46,26 @@ export const addCollectionAndDocuments = async (
   const batch = firestore.batch();
   objectsToAdd.forEach(obj => {
     const newDocRef = collectionRef.doc(obj.title);
-    let dd = {}
-   obj.items.forEach((itm, idx) => {
-      dd[idx] = itm;
-   });
-    batch.set(newDocRef, dd)
+    let temp = {};
+    obj.items.forEach((itm, idx) => {
+      temp[idx] = itm;
+    });
+    batch.set(newDocRef, temp);
   });
 
   return await batch.commit();
 };
 
-export const convertCollectionsSnapshotToMap = collections => {
+export const convertCollectionsSnapshotToMap = (collections, type) => {
   const transformedCollection = [];
-   collections.forEach(function(doc) {
-    transformedCollection.push({[doc.id] : Object.values(doc.data())});
+  collections.forEach(function(doc) {
+    let data = [];
+    if (type) {
+      data = Object.values(doc.data()).filter(supply => supply[type] === true);
+    } else {
+      data = Object.values(doc.data());
+    }
+    transformedCollection.push({ [doc.id]: data });
   });
   return transformedCollection;
 };
@@ -68,7 +74,7 @@ export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
 const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+provider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;

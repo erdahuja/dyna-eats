@@ -7,13 +7,14 @@ import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { selectData } from "../../redux/chef/chef.selectors";
-import EnhancedTable from "../table/table.component";
-import { fetchCollectionsStartAsync } from "../../redux/chef/chef.actions";
+import EnhancedTable from "../table-chef/table.component";
 
 const headCells = [
   { id: "title", numeric: false, label: "Type" },
   { id: "name", numeric: false, label: "Name" },
-  { id: "received", numeric: true, label: "Received" }
+  { id: "required", numeric: true, label: "Required" },
+  { id: "received", numeric: true, label: "Received" },
+  { id: "status", numeric: true, label: "Status" },
 ];
 
 const styles = {
@@ -36,40 +37,28 @@ const styles = {
   }
 };
 
-class Chef extends React.Component {
-  componentDidMount() {
-    const { fetchCollectionsStartAsync, chefType } = this.props;
-    fetchCollectionsStartAsync("supplies", chefType);
-  }
-
-  render() {
-    const { data, classes } = this.props;
-    console.log({
-      data
-    })
-    return (
-      <div className={classes.root}>
-        <Grid item xs={12}>
-          <CssBaseline />
-          <Paper className={classes.paper}>
-            {/* <EnhancedTable
+const Chef = ({ data, classes, chefType }) => {
+  console.log({
+    data
+  });
+  return (
+    <div className={classes.root}>
+      <Grid item xs={12}>
+        <CssBaseline />
+        <Paper className={classes.paper}>
+          <EnhancedTable
               data={data}
               headCells={headCells}
-              title={"Supplies"}
-            /> */}
-          </Paper>
-        </Grid>
-      </div>
-    );
-  }
-}
+              title={chefType.toUpperCase()}
+            />
+        </Paper>
+      </Grid>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   data: selectData
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchCollectionsStartAsync: (name, type) => dispatch(fetchCollectionsStartAsync(name, type))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Chef));
+export default connect(mapStateToProps)(withStyles(styles)(Chef));

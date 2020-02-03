@@ -72,7 +72,7 @@ const EnhancedTableToolbar = props => {
       >
         {title}
       </Typography>
-        <CustomForm />
+        { CustomForm ? <CustomForm /> : null}
     </Toolbar>
   );
 };
@@ -115,7 +115,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function EnhanceTable({ data: rows, headCells, title, CustomForm }) {
   const classes = useStyles();
-console.log(rows)
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>

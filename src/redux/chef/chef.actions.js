@@ -1,9 +1,9 @@
-import DataActionTypes from './chef.types';
+import DataActionTypes from "./chef.types";
 
 import {
   firestore,
   convertCollectionsSnapshotToMap
-} from '../../firebase/firebase.utils';
+} from "../../firebase/firebase.utils";
 
 export const fetchCollectionsStart = () => ({
   type: DataActionTypes.FETCH_COLLECTIONS_START_CHEF
@@ -19,17 +19,14 @@ export const fetchCollectionsFailure = errorMessage => ({
   payload: errorMessage
 });
 
-export const fetchCollectionsStartAsync = (collectionName, type) => {
+export const fetchCollectionsChefStartAsync = (collectionName, type) => {
   return dispatch => {
     const collectionRef = firestore.collection(collectionName);
     dispatch(fetchCollectionsStart());
-console.log({
-  collectionName, type
-})
     collectionRef
       .get()
       .then(snapshot => {
-        const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+        const collectionsMap = convertCollectionsSnapshotToMap(snapshot, type);
         dispatch(fetchCollectionsSuccess(collectionsMap));
       })
       .catch(error => dispatch(fetchCollectionsFailure(error.message)));

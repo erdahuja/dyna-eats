@@ -7,11 +7,18 @@ import { selectCurrentUser } from "../../redux/user/user.selectors";
 import Container from "../../components/data-overview/data-overview.container";
 import Chef from "../../components/chef-data/chef-data.container";
 import { fetchCollectionsStartAsync } from "../../redux/dashboard/dashboard.actions";
+import { fetchCollectionsChefStartAsync } from "../../redux/chef/chef.actions";
 
 class Dashboard extends React.Component {
   componentDidMount() {
-    const { fetchCollectionsStartAsync } = this.props;
-    fetchCollectionsStartAsync("supplies");
+    const { currentUser, fetchCollectionsStartAsync, fetchCollectionsChefStartAsync } = this.props;
+    const { type } = currentUser;
+    if (type === "manager") {
+      fetchCollectionsStartAsync("supplies");
+    } else if (type.includes("chef")) {
+      const chefType = type.split(":")[1];
+      fetchCollectionsChefStartAsync("supplies", chefType);
+    }
   }
   render() {
     const { currentUser } = this.props;
@@ -19,11 +26,11 @@ class Dashboard extends React.Component {
       return null;
     }
     const { type } = currentUser;
-    if (true) {
+    if (type === "manager") {
       return <Container />;
     } else if (type.includes("chef")) {
       const chefType = type.split(":")[1];
-      return <Chef chefType={chefType} />;
+      return <Chef chefType={chefType}/>;
     }
   }
 }
@@ -33,7 +40,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchCollectionsStartAsync: name => dispatch(fetchCollectionsStartAsync(name))
+  fetchCollectionsStartAsync: name => dispatch(fetchCollectionsStartAsync(name)),
+  fetchCollectionsChefStartAsync: (name, type) => dispatch(fetchCollectionsChefStartAsync(name, type))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
