@@ -13,6 +13,9 @@ class Dashboard extends React.Component {
   componentDidMount() {
     const { currentUser, fetchCollectionsStartAsync, fetchCollectionsChefStartAsync } = this.props;
     const { type } = currentUser;
+    if (!type) {
+      return null;
+    }
     if (type === "manager") {
       fetchCollectionsStartAsync("supplies");
     } else if (type.includes("chef")) {
