@@ -51,10 +51,23 @@ export default function FormDialog() {
     setOpen(false);
   };
 
+  const validate = () => {
+    if (!name) {
+      throw new Error("Name is missing");
+    }
+    if (!type) {
+      throw new Error("Type is missing");
+    }
+    if (!bakery && !indian && !italian) {
+      throw new Error("Category is missing");
+    }
+  };
+
   const handleSubmit = async event => {
     event.preventDefault();
     try {
       setLoading(true);
+      validate();
       const docRef = await firestore.collection("supplies").doc(type);
       const snapShot = await docRef.get();
       const data = snapShot.data();
