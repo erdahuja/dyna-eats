@@ -26,6 +26,9 @@ class Dashboard extends React.Component {
       return null;
     }
     const { type } = currentUser;
+    if (!type) {
+      return null;
+    }
     if (type === "manager") {
       return <Container />;
     } else if (type.includes("chef")) {
