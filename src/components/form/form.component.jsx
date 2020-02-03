@@ -49,6 +49,7 @@ export default function FormDialog() {
 
   const handleClose = () => {
     setOpen(false);
+    reset();
   };
 
   const validate = () => {
@@ -62,6 +63,19 @@ export default function FormDialog() {
       throw new Error("Category is missing");
     }
   };
+
+  const reset = () => {
+    setName("");
+    setType("");
+    setName("");
+    setQtyRequired(0);
+    setVendorOne(0);
+    setVendorTwo(0);
+    setIndian(false);
+    setItalian(false);
+    setBakery(false);
+    setError(null);
+  }
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -83,15 +97,7 @@ export default function FormDialog() {
       };
       await docRef.set(data);
       setOpen(false);
-      setName("");
-      setType("");
-      setName("");
-      setQtyRequired(0);
-      setVendorOne(0);
-      setVendorTwo(0);
-      setIndian(false);
-      setItalian(false);
-      setBakery(false);
+      reset();
     } catch (error) {
       console.error("add supply error");
       console.log(error);
