@@ -38,9 +38,6 @@ const styles = {
 };
 
 const Chef = ({ data, classes, chefType }) => {
-  console.log({
-    data
-  });
   return (
     <div className={classes.root}>
       <Grid item xs={12}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormHelperText from '@material-ui/core/FormHelperText';
+import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,7 +12,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { SpinnerContainer, SpinnerOverlay } from "./with-spinner.styles";
+import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -49,6 +50,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setLoading] = useState(null);
   const handleSubmit = async event => {
     event.preventDefault();
     if (password !== confirmPassword) {
@@ -57,6 +59,7 @@ export default function SignUp() {
     }
 
     try {
+      setLoading(true);
       const { user } = await auth.createUserWithEmailAndPassword(
         email,
         password
@@ -68,11 +71,14 @@ export default function SignUp() {
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
-      console.error("sign up error")
+      console.error("sign up error");
       console.log(error);
       setError(error);
+    } finally {
+      setLoading(false);
     }
   };
+  console.log(isLoading)
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -80,84 +86,92 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                autoFocus
-                onChange={e => setName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                onChange={e => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={e => setPassword(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                id="confirmPassword"
-                onChange={e => setConfirmPassword(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl className={classes.formControl}>
-                <InputLabel id="simple-select-label">Type</InputLabel>
-                <Select
-                  labelId="simple-select-label"
-                  id="simple-select"
+        {isLoading ? (
+          <SpinnerOverlay>
+            <SpinnerContainer />
+          </SpinnerOverlay>
+        ) : (
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  variant="outlined"
                   required
-                  value={type}
-                  onChange={e => setType(e.target.value)}
-                >
-                  <MenuItem value="manager">Manager</MenuItem>
-                  <MenuItem value="chef:indian">Chef (Indian)</MenuItem>
-                  <MenuItem value="chef:bakery">Chef (Bakery)</MenuItem>
-                  <MenuItem value="chef:italian">Chef (Italian)</MenuItem>
-                </Select>
-              </FormControl>
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  autoFocus
+                  onChange={e => setName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  onChange={e => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  onChange={e => setConfirmPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="simple-select-label">Type</InputLabel>
+                  <Select
+                    labelId="simple-select-label"
+                    id="simple-select"
+                    required
+                    value={type}
+                    onChange={e => setType(e.target.value)}
+                  >
+                    <MenuItem value="manager">Manager</MenuItem>
+                    <MenuItem value="chef:indian">Chef (Indian)</MenuItem>
+                    <MenuItem value="chef:bakery">Chef (Bakery)</MenuItem>
+                    <MenuItem value="chef:italian">Chef (Italian)</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
-          <FormHelperText className={classes.error}>{error ? error.message : null}</FormHelperText>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-        </form>
+            <FormHelperText className={classes.error}>
+              {error ? error.message : null}
+            </FormHelperText>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign Up
+            </Button>
+          </form>
+        )}
       </div>
     </Container>
   );
