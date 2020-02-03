@@ -30,9 +30,14 @@ const useStyles = makeStyles(theme => ({
 
 function Copyright() {
   return (
+    <>
     <Typography variant="body2" color="textSecondary" align="center">
-      user: 'chef' password: 'chef'
+      user: 'chef@indian.com' password: 'chefindian',
     </Typography>
+    <Typography variant="body2" color="textSecondary" align="center">
+      user: 'manager@dyna.com' password: 'manager',
+    </Typography>
+    </>
   );
 }
 
