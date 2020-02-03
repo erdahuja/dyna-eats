@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -18,6 +19,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 
 import { firestore } from "../../firebase/firebase.utils";
 import { SpinnerContainer, SpinnerOverlay } from "./with-spinner.styles";
+import { fetchCollectionsStartAsync } from "../../redux/dashboard/dashboard.actions";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function FormDialog() {
+const FormDialog = ({ fetchCollectionsStartAsync }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [type, setType] = useState("");
@@ -96,6 +98,7 @@ export default function FormDialog() {
         italian
       };
       await docRef.set(data);
+      fetchCollectionsStartAsync('supplies');
       setOpen(false);
       reset();
     } catch (error) {
@@ -135,7 +138,6 @@ export default function FormDialog() {
                 type="string"
                 fullWidth
               />
-
               <TextField
                 margin="dense"
                 onChange={e => setQtyRequired(e.target.value)}
@@ -232,3 +234,9 @@ export default function FormDialog() {
     </div>
   );
 }
+
+const mapDispatchToProps = dispatch => ({
+  fetchCollectionsStartAsync: name => dispatch(fetchCollectionsStartAsync(name)),
+});
+
+export default connect(null, mapDispatchToProps)(FormDialog);
