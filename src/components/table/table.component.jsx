@@ -11,8 +11,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Tooltip from "@material-ui/core/Tooltip";
-import FormDialog from "../form/form.component";
 import Chip from "@material-ui/core/Chip";
 
 function EnhanceTableHead(props) {
@@ -61,7 +59,7 @@ const useToolbarStyles = makeStyles(theme => ({
 
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
-  const { title } = props;
+  const { title, CustomForm } = props;
 
   return (
     <Toolbar className={clsx(classes.root)}>
@@ -74,15 +72,14 @@ const EnhancedTableToolbar = props => {
       >
         {title}
       </Typography>
-      <Tooltip title="Create">
-        <FormDialog />
-      </Tooltip>
+        <CustomForm />
     </Toolbar>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  CustomForm: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -116,13 +113,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EnhanceTable({ data: rows, headCells, title }) {
+export default function EnhanceTable({ data: rows, headCells, title, CustomForm }) {
   const classes = useStyles();
-
+console.log(rows)
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar title={title} />
+        <EnhancedTableToolbar title={title} CustomForm={CustomForm} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -134,7 +131,7 @@ export default function EnhanceTable({ data: rows, headCells, title }) {
             <TableBody>
               {rows.map((_row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
-                return _row.items.map(row => (
+                return Object.values(_row)[0].map(row => (
                   <TableRow hover tabIndex={-1} key={row.id}>
                     <TableCell
                       component="th"
@@ -142,7 +139,7 @@ export default function EnhanceTable({ data: rows, headCells, title }) {
                       scope="row"
                       padding="none"
                     >
-                      <Chip label={_row.title} />
+                      <Chip label={Object.keys(_row)[0]} />
                     </TableCell>
                     <TableCell
                       component="th"

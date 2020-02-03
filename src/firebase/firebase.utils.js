@@ -45,24 +45,22 @@ export const addCollectionAndDocuments = async (
   const collectionRef = firestore.collection(collectionKey);
   const batch = firestore.batch();
   objectsToAdd.forEach(obj => {
-    const newDocRef = collectionRef.doc();
-    batch.set(newDocRef, obj);
+    const newDocRef = collectionRef.doc(obj.title);
+    let dd = {}
+   obj.items.forEach((itm, idx) => {
+      dd[idx] = itm;
+   });
+    batch.set(newDocRef, dd)
   });
 
   return await batch.commit();
 };
 
 export const convertCollectionsSnapshotToMap = collections => {
-  const transformedCollection = collections.docs.map(doc => {
-    const { title, items } = doc.data();
-
-    return {
-      id: doc.id,
-      title,
-      items
-    };
+  const transformedCollection = [];
+   collections.forEach(function(doc) {
+    transformedCollection.push({[doc.id] : Object.values(doc.data())});
   });
-
   return transformedCollection;
 };
 

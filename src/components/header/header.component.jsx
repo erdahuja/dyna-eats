@@ -30,9 +30,6 @@ const useStyles = makeStyles(theme => ({
 
 const Header = ({ currentUser }) => {
   const classes = useStyles();
-  console.log({
-    currentUser
-  });
   return (
     <AppBar position="static">
       <Toolbar>
