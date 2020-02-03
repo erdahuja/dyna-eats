@@ -55,18 +55,20 @@ export default function FormDialog() {
     event.preventDefault();
     try {
       setLoading(true);
-      await firestore
-        .collection("supplies")
-        .doc(type)
-        .set({
-          name,
-          qtyRequired,
-          vendorOne,
-          vendorTwo,
-          bakery,
-          indian,
-          italian
-        });
+      const docRef = await firestore.collection("supplies").doc(type);
+      const snapShot = await docRef.get();
+      const data = snapShot.data();
+      const id = Object.keys(snapShot.data()).length + 1;
+      data[id] = {
+        name,
+        qtyRequired,
+        vendorOne,
+        vendorTwo,
+        bakery,
+        indian,
+        italian
+      };
+      await docRef.set(data);
       setOpen(false);
       setName("");
       setType("");
