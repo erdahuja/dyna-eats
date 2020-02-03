@@ -32,10 +32,10 @@ function Copyright() {
   return (
     <>
     <Typography variant="body2" color="textSecondary" align="center">
-      user: 'chef@indian.com' password: 'chefindian',
+      user: 'manager@dyna.com' password: 'manager',
     </Typography>
     <Typography variant="body2" color="textSecondary" align="center">
-      user: 'manager@dyna.com' password: 'manager',
+      user: 'chef@indian.com' password: 'chefindian',
     </Typography>
     </>
   );
