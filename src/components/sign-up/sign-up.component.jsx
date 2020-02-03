@@ -78,7 +78,6 @@ export default function SignUp() {
       setLoading(false);
     }
   };
-  console.log(isLoading)
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
